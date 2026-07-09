@@ -8,7 +8,10 @@
 <meta name="theme-color" content="#14120F" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Chivo:ital,wght@0,300;0,400;0,600;0,900;1,400&family=Chivo+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
 /* ─────────────────────────────────────────────────────────────
    ROADBOOK — asphalt & ember
@@ -90,7 +93,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 
 /* ── Topbar ────────────────────────────────────────────────────────── */
 .topbar{
-  position:sticky; top:0; z-index:40;
+  position:sticky; top:0; z-index:600;
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
   padding:.85rem var(--gutter);
   background:rgba(20,18,15,.8);
@@ -126,11 +129,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .hero__plate .n{ font-family:var(--f-display); font-weight:800; font-size:1rem; color:var(--ember); }
 .hero__plate .t{ font-family:var(--f-mono); font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:var(--bone-dim); }
 
-.hero h1{
-  font-size:clamp(2.7rem,10.5vw,7.4rem);
-  text-transform:uppercase;
-  margin-bottom:.28em;
-}
+.hero h1{ font-size:clamp(2.7rem,10.5vw,7.4rem); text-transform:uppercase; margin-bottom:.28em; }
 .hero h1 .amp{ font-weight:600; font-style:italic; color:var(--ember); letter-spacing:-.04em; }
 .hero h1 .line2{ display:block; color:var(--bone-dim); }
 
@@ -141,7 +140,6 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .hero__lede strong{ color:var(--bone); font-weight:600; }
 .hero__lede em{ color:var(--bone); font-style:italic; }
 
-/* Stat strip */
 .stats{
   display:grid; gap:1px; background:var(--rule);
   grid-template-columns:repeat(2,1fr);
@@ -168,17 +166,68 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 /* ── Map ───────────────────────────────────────────────────────────── */
 .mapcard{
   border:1px solid var(--rule-strong); border-radius:4px; overflow:hidden;
-  background:var(--asphalt-2); box-shadow:var(--shadow-lift);
+  background:var(--asphalt-2); box-shadow:var(--shadow-lift); position:relative;
 }
-.mapcard__frame{ position:relative; aspect-ratio:16/11; background:var(--graphite); }
-@media (min-width:820px){ .mapcard__frame{ aspect-ratio:16/8; } }
-.mapcard__frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; filter:grayscale(.28) contrast(1.04); }
-
+#map{
+  height:clamp(360px, 62vh, 560px); width:100%;
+  background:var(--graphite); z-index:1;
+}
 .mapcard__foot{
   display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
-  padding:1rem 1.15rem; border-top:1px solid var(--rule);
+  padding:1rem 1.15rem; border-top:1px solid var(--rule); position:relative; z-index:2;
 }
 .mapcard__note{ font-family:var(--f-mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--bone-faint); }
+.mapcard__note b{ color:var(--ember); font-weight:600; }
+
+/* Leaflet reskin */
+.leaflet-container{ font-family:var(--f-body); background:var(--graphite); }
+.leaflet-control-zoom a{
+  background:var(--asphalt-2)!important; color:var(--bone)!important;
+  border-color:var(--rule-strong)!important; font-weight:400;
+}
+.leaflet-control-zoom a:hover{ background:var(--graphite-hi)!important; color:var(--ember)!important; }
+.leaflet-control-attribution{
+  background:rgba(20,18,15,.86)!important; color:var(--bone-faint)!important;
+  font-family:var(--f-mono)!important; font-size:.56rem!important; letter-spacing:.04em;
+}
+.leaflet-control-attribution a{ color:var(--bone-dim)!important; }
+.leaflet-bar{ border:1px solid var(--rule-strong)!important; box-shadow:none!important; }
+
+/* map hint overlay while scroll-zoom is locked */
+.map-hint{
+  position:absolute; inset:0; z-index:400; display:grid; place-items:center;
+  background:rgba(20,18,15,.55); backdrop-filter:blur(1px);
+  font-family:var(--f-mono); font-size:.66rem; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--bone); cursor:pointer; transition:opacity .3s ease;
+}
+.map-hint[hidden]{ display:none; }
+.map-hint span{ border:1px solid var(--rule-strong); background:rgba(28,25,21,.9); padding:.7rem 1rem; border-radius:2px; }
+
+/* numbered plate markers */
+.pin{
+  width:30px; height:30px; border-radius:2px; display:grid; place-items:center;
+  background:linear-gradient(180deg,var(--graphite-hi),var(--graphite));
+  border:1px solid var(--rule-strong); color:var(--bone);
+  font-family:var(--f-display); font-weight:800; font-size:.76rem;
+  box-shadow:0 3px 10px rgba(0,0,0,.7);
+}
+.pin--eat{ border-color:rgba(69,144,140,.75);  color:var(--sea); }
+.pin--ride{ border-color:rgba(232,98,42,.8);   color:var(--ember); }
+.pin--walk{ border-color:rgba(138,154,91,.75); color:var(--olive); }
+
+.leaflet-popup-content-wrapper{
+  background:var(--asphalt-2); color:var(--bone); border:1px solid var(--rule-strong);
+  border-radius:3px; box-shadow:var(--shadow-lift);
+}
+.leaflet-popup-tip{ background:var(--asphalt-2); border:1px solid var(--rule-strong); }
+.leaflet-popup-content{ margin:0; width:210px!important; }
+.leaflet-popup-close-button{ color:var(--bone-faint)!important; }
+.pop img{ width:100%; height:110px; object-fit:cover; display:block; border-bottom:1px solid var(--rule); }
+.pop__b{ padding:.7rem .8rem .8rem; }
+.pop__t{ font-family:var(--f-mono); font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:var(--amber); }
+.pop__h{ font-family:var(--f-display); font-weight:800; font-size:.98rem; letter-spacing:-.02em; margin:.28rem 0 .5rem; line-height:1.1; }
+.pop__l{ font-family:var(--f-mono); font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ember); text-decoration:none; }
+.pop__l:hover{ color:var(--ember-hot); }
 
 .btn{
   display:inline-flex; align-items:center; gap:.55rem;
@@ -194,8 +243,6 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 
 /* ── Roadbook timeline ─────────────────────────────────────────────── */
 .road{ position:relative; }
-
-/* the centre-line: a dashed road running down the page */
 .road::before{
   content:""; position:absolute; top:.6rem; bottom:5rem; left:19px; width:2px;
   background:repeating-linear-gradient(to bottom, var(--rule-strong) 0 12px, transparent 12px 26px);
@@ -203,14 +250,11 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 @media (min-width:860px){ .road::before{ left:calc(96px + 27px); } }
 
 .stop{
-  position:relative;
-  display:grid; gap:.35rem 1.5rem;
-  grid-template-columns:auto 1fr;
+  position:relative; scroll-margin-top:5rem;
+  display:grid; gap:.35rem 1.5rem; grid-template-columns:auto 1fr;
   padding-bottom:clamp(2.2rem,5vw,3.4rem);
 }
-@media (min-width:860px){
-  .stop{ grid-template-columns:96px auto 1fr; gap:0 1.5rem; }
-}
+@media (min-width:860px){ .stop{ grid-template-columns:96px auto 1fr; gap:0 1.5rem; } }
 
 .stop__time{
   grid-column:2; justify-self:start;
@@ -218,15 +262,11 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
   padding-left:.1rem; margin-bottom:.3rem;
 }
 @media (min-width:860px){
-  .stop__time{
-    grid-column:1; grid-row:1 / span 2; justify-self:end; text-align:right;
-    padding-top:.55rem; margin-bottom:0;
-  }
+  .stop__time{ grid-column:1; grid-row:1 / span 2; justify-self:end; text-align:right; padding-top:.55rem; margin-bottom:0; }
   .stop__time small{ display:block; margin-top:.35rem; margin-left:0; }
 }
 .stop__time small{ color:var(--bone-faint); font-size:.62rem; letter-spacing:.14em; margin-left:.5rem; text-transform:uppercase; }
 
-/* number plate */
 .stop__plate{
   grid-column:1; grid-row:1 / span 3;
   width:40px; height:40px; border-radius:2px;
@@ -243,6 +283,33 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 
 .stop__body{ grid-column:2; }
 @media (min-width:860px){ .stop__body{ grid-column:3; } }
+
+/* ── Photo ─────────────────────────────────────────────────────────── */
+.shot{
+  margin:0 0 1.15rem; border:1px solid var(--rule-strong); border-radius:3px;
+  overflow:hidden; background:var(--graphite); position:relative;
+}
+.shot img{
+  display:block; width:100%; height:auto; aspect-ratio:16/10; object-fit:cover;
+  filter:grayscale(.34) contrast(1.06) brightness(.9);
+  transition:filter .5s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+}
+.shot:hover img{ filter:none; transform:scale(1.02); }
+.shot::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, transparent 55%, rgba(20,18,15,.82) 100%);
+}
+.shot figcaption{
+  position:absolute; left:0; right:0; bottom:0; z-index:2;
+  display:flex; align-items:flex-end; justify-content:space-between; gap:.75rem; flex-wrap:wrap;
+  padding:.6rem .75rem;
+  font-family:var(--f-mono); font-size:.56rem; letter-spacing:.13em; text-transform:uppercase;
+}
+.shot__where{ color:var(--bone); }
+.shot__where.is-mood{ color:var(--bone-faint); font-style:normal; }
+.shot__cred{ color:var(--bone-faint); }
+.shot__cred a{ color:var(--bone-dim); text-decoration:none; border-bottom:1px solid var(--rule); }
+.shot__cred a:hover{ color:var(--ember-hot); border-color:var(--ember); }
 
 .tags{ display:flex; flex-wrap:wrap; gap:.4rem; margin-bottom:.7rem; }
 .tag{
@@ -281,7 +348,6 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .order--warn b{ color:var(--amber); }
 .order code{ font-family:var(--f-mono); font-size:.85em; color:var(--amber); }
 
-/* an "optional leg" card gets a dashed border */
 .stop--optional .stop__body{
   border:1px dashed var(--rule-strong); border-radius:3px;
   padding:1.15rem 1.15rem .35rem; background:rgba(38,33,25,.35);
@@ -290,7 +356,6 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .actions{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.05rem; margin-bottom:.7rem; }
 .actions .btn{ font-size:.62rem; padding:.62rem .85rem; }
 
-/* leg connector */
 .leg{
   grid-column:1 / -1; display:flex; align-items:center; gap:.7rem;
   margin:.4rem 0 -.6rem; padding-left:56px;
@@ -299,7 +364,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 @media (min-width:860px){ .leg{ padding-left:calc(96px + 1.5rem + 40px + 1.5rem); } }
 .leg .chev{ color:var(--ember); letter-spacing:-.1em; }
 
-/* ── Notes / cards ─────────────────────────────────────────────────── */
+/* ── Notes ─────────────────────────────────────────────────────────── */
 .grid{ display:grid; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:3px; overflow:hidden; }
 @media (min-width:760px){ .grid--2{ grid-template-columns:1fr 1fr; } }
 .note{ background:var(--asphalt-2); padding:clamp(1.25rem,3vw,1.8rem); }
@@ -333,8 +398,10 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .foot p:last-child{ margin-bottom:0; }
 .foot .rule{ color:var(--ember); }
 .foot em{ color:var(--bone-dim); }
+.foot a{ color:var(--bone-dim); text-decoration:none; border-bottom:1px solid var(--rule); }
+.foot a:hover{ color:var(--ember-hot); }
 
-/* ── Entrance choreography ─────────────────────────────────────────── */
+/* ── Motion ────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion:no-preference){
   .rise{ opacity:0; transform:translateY(16px); animation:rise .8s cubic-bezier(.22,1,.36,1) forwards; }
   @keyframes rise{ to{ opacity:1; transform:none; } }
@@ -347,11 +414,13 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 ::selection{ background:var(--ember); color:var(--asphalt); }
 a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
 
-/* ── Print: fold it into the tank bag ──────────────────────────────── */
+/* ── Print ─────────────────────────────────────────────────────────── */
 @media print{
   body{ background:#fff; color:#000; }
-  body::before, body::after, .topbar, .mapcard__frame, .actions{ display:none!important; }
+  body::before, body::after, .topbar, .mapcard, .actions{ display:none!important; }
   .road::before{ background:none; }
+  .shot{ border:1px solid #999; }
+  .shot img{ filter:grayscale(1) contrast(1.1); }
   .stop__plate{ box-shadow:none; border:1px solid #000; color:#000; background:none; }
   .stop h3, h1, h2{ color:#000; }
   .stop__body p, .stop__where, .note p, .checklist li{ color:#222; }
@@ -364,7 +433,6 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
 
 <div class="shell">
 
-  <!-- ══ TOPBAR ══════════════════════════════════════════════════════ -->
   <header class="topbar">
     <div class="topbar__mark">Roadbook<span>.</span></div>
     <div class="topbar__meta">Sun 06 · 09 · 2026 — Montjuïc &amp; the Litoral</div>
@@ -395,31 +463,25 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
     </p>
 
     <div class="stats rise d4">
-      <div class="stat"><div class="stat__v">55<small> km</small></div><div class="stat__k">All inside the city</div></div>
-      <div class="stat"><div class="stat__v">0<small> km</small></div><div class="stat__k">Of motorway</div></div>
+      <div class="stat"><div class="stat__v">45<small> km</small></div><div class="stat__k">All inside the city</div></div>
+      <div class="stat"><div class="stat__v">1<small>h</small>30</div><div class="stat__k">Actually moving</div></div>
       <div class="stat"><div class="stat__v">9</div><div class="stat__k">Stops, all Sunday-open</div></div>
       <div class="stat"><div class="stat__v">20:16</div><div class="stat__k">Sunset, due west</div></div>
     </div>
   </section>
 
   <!-- ══ MAP ═════════════════════════════════════════════════════════ -->
-  <section class="section wrap" id="map">
+  <section class="section wrap" id="map-section">
     <div class="section__head">
       <h2>The Loop</h2>
       <span class="eyebrow">Overview</span>
     </div>
 
     <div class="mapcard reveal">
-      <div class="mapcard__frame">
-        <iframe
-          title="Overview map of the Montjuïc and Litoral motorcycle route inside Barcelona"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://maps.google.com/maps?saddr=Carrer+d%27Olzinelles+114,Barcelona&daddr=Avinguda+de+l%27Estadi,Barcelona+to:Mirador+de+l%27Alcalde,Barcelona+to:Vallvidrera,Barcelona+to:Carrer+del+Clot+41,Barcelona+to:Carrer+de+Lope+de+Vega+93,Barcelona+to:Passeig+de+Joan+de+Borbo,Barcelona+to:Parc+del+Forum,Barcelona+to:Placa+de+Prim+1,Barcelona&output=embed">
-        </iframe>
-      </div>
+      <div id="map" role="region" aria-label="Interactive map of the route with nine numbered stops"></div>
+      <div class="map-hint" id="mapHint"><span>Tap to explore the map</span></div>
       <div class="mapcard__foot">
-        <span class="mapcard__note">Sants → Montjuïc → Vallvidrera → El Clot → Poblenou → Barceloneta → Fòrum</span>
+        <span class="mapcard__note"><b id="mapKm">44.6 km</b> · real road geometry, not straight lines</span>
         <a class="btn"
            href="https://www.google.com/maps/dir/?api=1&origin=Carrer+d%27Olzinelles+114%2C+Barcelona&destination=Restaurant+Els+Pescadors%2C+Pla%C3%A7a+de+Prim+1%2C+Barcelona&waypoints=Avinguda+de+l%27Estadi%2C+Barcelona%7CMirador+de+l%27Alcalde%2C+Barcelona%7CVallvidrera%2C+Barcelona%7CCarrer+del+Clot+41%2C+Barcelona%7CCarrer+de+Lope+de+Vega+93%2C+Barcelona%7CPasseig+de+Joan+de+Borb%C3%B3%2C+Barcelona%7CParc+del+F%C3%B2rum%2C+Barcelona&travelmode=driving"
            target="_blank" rel="noopener">
@@ -439,11 +501,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
 
     <div class="road">
 
-      <!-- 01 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--eat reveal">
+      <!-- 01 -->
+      <article class="stop stop--eat reveal" id="stop-01">
         <div class="stop__plate">01</div>
         <div class="stop__time">11:30 <small>90 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="01"></figure>
           <div class="tags">
             <span class="tag tag--eat">Esmorzar</span>
             <span class="tag tag--open">Sun 09:00–17:00</span>
@@ -492,11 +555,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> 13:00 — roll out · Sants up onto the mountain · 10 min</div>
       </article>
 
-      <!-- 02 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--ride reveal">
+      <!-- 02 -->
+      <article class="stop stop--ride reveal" id="stop-02">
         <div class="stop__plate">02</div>
         <div class="stop__time">13:15 <small>40 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="02"></figure>
           <div class="tags">
             <span class="tag tag--ride">The road</span>
             <span class="tag">Circuit de Montjuïc · 1969–1975</span>
@@ -506,9 +570,9 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
 
           <p>
             Four Formula One Grands Prix and decades of motorcycle racing ran on these public
-            roads. The <em>Recta de l'Estadi</em> was the pit straight. The <em>Revolt de Miramar</em>
-            is still there, still off-camber, still with the whole port opening up underneath it
-            as you come out.
+            roads. The <em>Recta de l'Estadi</em> was the pit straight — it runs along the flank of
+            the Olympic stadium above. The <em>Revolt de Miramar</em> is still there, still
+            off-camber, still with the whole port opening up underneath it as you come out.
           </p>
           <p>
             Nobody has raced here since 1975 and there is no plaque worth stopping for. You just
@@ -520,8 +584,8 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
             <b>Two caveats, honestly</b>
             Passeig Olímpic and Avinguda dels Montanyans get called "the circuit" online — neither
             was part of the 1969–75 lap, so don't chase a perfect reconstruction. And Montjuïc's
-            roads close for events (football at the Estadi Olímpic, city spectaculars). No standing
-            Sunday closure exists, but <strong>check the event calendar the week before.</strong>
+            roads close for events at the stadium. No standing Sunday closure exists, but
+            <strong>check the event calendar the week before.</strong>
           </div>
 
           <div class="actions">
@@ -535,11 +599,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Park at the mirador · 5 min</div>
       </article>
 
-      <!-- 03 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--walk reveal">
+      <!-- 03 -->
+      <article class="stop stop--walk reveal" id="stop-03">
         <div class="stop__plate">03</div>
         <div class="stop__time">14:00 <small>50 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="03"></figure>
           <div class="tags">
             <span class="tag tag--walk">Park &amp; walk</span>
             <span class="tag tag--open">Free · 08:00–21:00</span>
@@ -579,11 +644,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Across the city · Sants → Les Corts → Sarrià → Avinguda del Tibidabo · 30 min</div>
       </article>
 
-      <!-- 04 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--ride stop--optional reveal">
+      <!-- 04 -->
+      <article class="stop stop--ride stop--optional reveal" id="stop-04">
         <div class="stop__plate">04</div>
         <div class="stop__time">15:30 <small>75 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="04"></figure>
           <div class="tags">
             <span class="tag tag--ride">The climb</span>
             <span class="tag tag--call">Check before you go</span>
@@ -633,11 +699,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Down the Arrabassada, across to El Clot · 25 min</div>
       </article>
 
-      <!-- 05 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--eat reveal">
+      <!-- 05 -->
+      <article class="stop stop--eat reveal" id="stop-05">
         <div class="stop__plate">05</div>
         <div class="stop__time">17:15 <small>45 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="05"></figure>
           <div class="tags">
             <span class="tag tag--eat">Vermut</span>
             <span class="tag tag--open">Open Sunday</span>
@@ -679,11 +746,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> El Clot down into Poblenou · 10 min</div>
       </article>
 
-      <!-- 06 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--eat reveal">
+      <!-- 06 -->
+      <article class="stop stop--eat reveal" id="stop-06">
         <div class="stop__plate">06</div>
         <div class="stop__time">18:15 <small>40 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="06"></figure>
           <div class="tags">
             <span class="tag tag--eat">Cheesecake</span>
             <span class="tag tag--call">Confirm hours first</span>
@@ -731,11 +799,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Down to the water at Barceloneta · 15 min</div>
       </article>
 
-      <!-- 07 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--walk reveal">
+      <!-- 07 -->
+      <article class="stop stop--walk reveal" id="stop-07">
         <div class="stop__plate">07</div>
         <div class="stop__time">19:15 <small>35 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="07"></figure>
           <div class="tags">
             <span class="tag tag--walk">Park &amp; walk</span>
             <span class="tag">Free moto bays</span>
@@ -769,11 +838,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Turn east into the golden hour · 19:50</div>
       </article>
 
-      <!-- 08 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--ride reveal">
+      <!-- 08 -->
+      <article class="stop stop--ride reveal" id="stop-08">
         <div class="stop__plate">08</div>
         <div class="stop__time">19:50 <small>45 min</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="08"></figure>
           <div class="tags">
             <span class="tag tag--ride">Golden hour</span>
             <span class="tag tag--open">Sunset 20:16</span>
@@ -813,11 +883,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
         <div class="leg"><span class="chev">››</span> Back to Poblenou · Plaça de Prim · 20:40</div>
       </article>
 
-      <!-- 09 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--eat reveal">
+      <!-- 09 -->
+      <article class="stop stop--eat reveal" id="stop-09">
         <div class="stop__plate">09</div>
         <div class="stop__time">20:45 <small>Dinner</small></div>
         <div class="stop__body">
+          <figure class="shot" data-photo="09"></figure>
           <div class="tags">
             <span class="tag tag--eat">Dinner with friends</span>
             <span class="tag tag--open">Sun kitchen 20:00–22:15</span>
@@ -935,22 +1006,133 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
 
   <!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
   <footer class="foot wrap">
-    <p><span class="rule">■</span> Montjuïc &amp; the Litoral · Sunday 6 September 2026 · 55 km, none of them outside Barcelona</p>
+    <p><span class="rule">■</span> Montjuïc &amp; the Litoral · Sunday 6 September 2026 · 44.6 km, none of them outside Barcelona</p>
+    <p>
+      Route geometry from <a href="https://project-osrm.org" target="_blank" rel="noopener">OSRM</a>,
+      geocoding from <a href="https://nominatim.openstreetmap.org" target="_blank" rel="noopener">Nominatim</a>,
+      map tiles by <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a> over
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>.
+      Photographs from <a href="https://unsplash.com?utm_source=barcelona_roadbook&utm_medium=referral" target="_blank" rel="noopener">Unsplash</a>.
+    </p>
+    <p><em>Four of the nine photographs show a real place on this route — Montjuïc, Tibidabo, Barceloneta, the seafront. The other five are illustrative, and captioned as such. None of the small bars have been photographed for stock.</em></p>
     <p>Hours checked against restaurant sites, the Ajuntament, the Collserola park ordinance, zbe.barcelona and the Reglamento General de Circulación. Anything tagged <em>call first</em> could not be confirmed against a primary source — ring it.</p>
     <p>Ride within the road, not the roadbook.</p>
   </footer>
 
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="./assets/route.js"></script>
 <script>
-  // Reveal-on-scroll — the CSS guards this for reduced-motion users.
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    }
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+(function () {
+  const DATA = window.ROADBOOK;
 
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  /* ── Photos: injected from route.js so credit + URL never drift ──── */
+  function mountPhotos () {
+    if (!DATA) return;
+    for (const stop of DATA.stops) {
+      const fig = document.querySelector(`.shot[data-photo="${stop.n}"]`);
+      if (!fig) continue;
+      const p = stop.photo;
+      const img = document.createElement('img');
+      img.src = p.src;
+      img.srcset = `${p.src_sm} 520w, ${p.src} 900w`;
+      img.sizes = '(min-width: 860px) 640px, 100vw';
+      img.alt = p.alt;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.width = 900; img.height = 560;
+
+      const cap = document.createElement('figcaption');
+      cap.innerHTML =
+        `<span class="shot__where${p.real ? '' : ' is-mood'}">${p.caption}</span>` +
+        `<span class="shot__cred"><a href="${p.photog_url}" target="_blank" rel="noopener">${p.photog}</a> / Unsplash</span>`;
+
+      fig.append(img, cap);
+    }
+  }
+
+  /* ── Map ──────────────────────────────────────────────────────────── */
+  function mountMap () {
+    const el = document.getElementById('map');
+    if (!el) return;
+    if (!window.L || !DATA) {                       // CDN blocked or data missing
+      el.innerHTML = '<div style="display:grid;place-items:center;height:100%;' +
+        'font-family:var(--f-mono);font-size:.66rem;letter-spacing:.18em;' +
+        'text-transform:uppercase;color:var(--bone-faint);text-align:center;padding:2rem">' +
+        'Map unavailable offline —<br>use “Navigate full day” below</div>';
+      document.getElementById('mapHint')?.setAttribute('hidden', '');
+      return;
+    }
+
+    const map = L.map(el, { scrollWheelZoom: false, zoomControl: true, attributionControl: true });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> · route <a href="https://project-osrm.org">OSRM</a>'
+    }).addTo(map);
+
+    // dark casing under a hot ember line — reads like a road, not a scribble
+    L.polyline(DATA.route, { color: '#0C0B09', weight: 7, opacity: .85, lineJoin: 'round' }).addTo(map);
+    const line = L.polyline(DATA.route, { color: '#E8622A', weight: 2.5, opacity: .95, lineJoin: 'round' }).addTo(map);
+
+    const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+    for (const s of DATA.stops) {
+      const icon = L.divIcon({
+        className: '',
+        html: `<div class="pin pin--${s.kind}">${esc(s.n)}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -16]
+      });
+
+      const gmaps = 'https://www.google.com/maps/search/?api=1&query=' + s.lat + ',' + s.lng;
+      const html =
+        `<div class="pop">` +
+          `<img src="${s.photo.src_sm}" alt="${esc(s.photo.alt)}" loading="lazy">` +
+          `<div class="pop__b">` +
+            `<div class="pop__t">${esc(s.time)}</div>` +
+            `<div class="pop__h">${esc(s.title)}</div>` +
+            `<a class="pop__l" href="${gmaps}" target="_blank" rel="noopener">Open in Maps ↗</a>` +
+          `</div>` +
+        `</div>`;
+
+      L.marker([s.lat, s.lng], { icon, title: s.title, riseOnHover: true })
+        .addTo(map)
+        .bindPopup(html, { closeButton: true, maxWidth: 210 });
+    }
+
+    map.fitBounds(line.getBounds(), { padding: [42, 42] });
+
+    // Scroll-lock: a map that swallows page scroll on a phone is a menace.
+    const hint = document.getElementById('mapHint');
+    const unlock = () => { map.scrollWheelZoom.enable(); hint?.setAttribute('hidden', ''); };
+    hint?.addEventListener('click', unlock);
+    map.on('focus', unlock);
+    map.on('blur', () => { map.scrollWheelZoom.disable(); hint?.removeAttribute('hidden'); });
+
+    if (DATA.distance_km) {
+      const km = document.getElementById('mapKm');
+      if (km) km.textContent = DATA.distance_km + ' km';
+    }
+  }
+
+  /* ── Reveal on scroll ─────────────────────────────────────────────── */
+  function mountReveals () {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  }
+
+  mountPhotos();
+  mountMap();
+  mountReveals();
+})();
 </script>
 
 </body>
