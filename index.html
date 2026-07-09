@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Roadbook — Garraf &amp; the Litoral · Sunday 6 September 2026</title>
-<meta name="description" content="A one-day motorcycle roadbook out of Barcelona: esmorzar de forquilla, the Garraf cliff road, a Buddhist monastery, cheesecake in Poblenou, and a golden-hour run along the sea." />
+<title>Roadbook — Montjuïc &amp; the Litoral · Sunday 6 September 2026</title>
+<meta name="description" content="A one-day motorcycle roadbook that never leaves Barcelona: esmorzar de forquilla, the bones of the old Montjuïc circuit, the Vallvidrera climb, vermut in El Clot, cheesecake in Poblenou, and a golden-hour run along the sea. Built for a 125." />
 <meta name="theme-color" content="#14120F" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,7 +82,6 @@ body::after{
 
 /* Type -------------------------------------------------------------- */
 h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.94; letter-spacing:-.03em; }
-.mono{ font-family:var(--f-mono); font-weight:400; letter-spacing:.06em; text-transform:uppercase; }
 
 .eyebrow{
   font-family:var(--f-mono); font-size:.66rem; font-weight:600;
@@ -105,7 +104,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 }
 .topbar__mark span{ color:var(--ember); }
 .topbar__meta{ font-family:var(--f-mono); font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--bone-faint); }
-@media (max-width:560px){ .topbar__meta{ display:none; } }
+@media (max-width:620px){ .topbar__meta{ display:none; } }
 
 .topbar__cta{
   font-family:var(--f-mono); font-size:.63rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
@@ -119,7 +118,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .hero{ padding:clamp(3rem,9vw,6.5rem) 0 clamp(2rem,5vw,3.5rem); position:relative; }
 
 .hero__plate{
-  display:inline-flex; align-items:baseline; gap:.6rem;
+  display:inline-flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
   border:1px solid var(--rule-strong); border-radius:2px;
   padding:.4rem .7rem; margin-bottom:clamp(1.6rem,4vw,2.4rem);
   background:linear-gradient(180deg,var(--graphite),var(--asphalt-2));
@@ -140,6 +139,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
   font-weight:300; line-height:1.62; margin:0 0 clamp(1.8rem,4vw,2.6rem);
 }
 .hero__lede strong{ color:var(--bone); font-weight:600; }
+.hero__lede em{ color:var(--bone); font-style:italic; }
 
 /* Stat strip */
 .stats{
@@ -150,6 +150,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 @media (min-width:720px){ .stats{ grid-template-columns:repeat(4,1fr); } }
 .stat{ background:var(--asphalt-2); padding:1.05rem 1.15rem; }
 .stat__v{ font-family:var(--f-display); font-weight:800; font-size:clamp(1.5rem,4.4vw,2.1rem); line-height:1; letter-spacing:-.03em; }
+.stat__v small{ font-size:.5em; letter-spacing:0; font-weight:700; }
 .stat:nth-child(2) .stat__v{ color:var(--ember); }
 .stat:nth-child(4) .stat__v{ color:var(--amber); }
 .stat__k{ font-family:var(--f-mono); font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--bone-faint); margin-top:.5rem; }
@@ -211,7 +212,6 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
   .stop{ grid-template-columns:96px auto 1fr; gap:0 1.5rem; }
 }
 
-/* time rail (desktop only column) */
 .stop__time{
   grid-column:2; justify-self:start;
   font-family:var(--f-mono); font-weight:600; font-size:.82rem; letter-spacing:.08em; color:var(--amber);
@@ -222,10 +222,9 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
     grid-column:1; grid-row:1 / span 2; justify-self:end; text-align:right;
     padding-top:.55rem; margin-bottom:0;
   }
-  .stop__time small{ display:block; color:var(--bone-faint); font-size:.62rem; letter-spacing:.14em; margin-top:.35rem; text-transform:uppercase; }
+  .stop__time small{ display:block; margin-top:.35rem; margin-left:0; }
 }
 .stop__time small{ color:var(--bone-faint); font-size:.62rem; letter-spacing:.14em; margin-left:.5rem; text-transform:uppercase; }
-@media (min-width:860px){ .stop__time small{ margin-left:0; } }
 
 /* number plate */
 .stop__plate{
@@ -280,11 +279,18 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 }
 .order--warn{ border-left-color:var(--amber); }
 .order--warn b{ color:var(--amber); }
+.order code{ font-family:var(--f-mono); font-size:.85em; color:var(--amber); }
 
-.actions{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.05rem; }
+/* an "optional leg" card gets a dashed border */
+.stop--optional .stop__body{
+  border:1px dashed var(--rule-strong); border-radius:3px;
+  padding:1.15rem 1.15rem .35rem; background:rgba(38,33,25,.35);
+}
+
+.actions{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.05rem; margin-bottom:.7rem; }
 .actions .btn{ font-size:.62rem; padding:.62rem .85rem; }
 
-/* leg connector — the ride between stops */
+/* leg connector */
 .leg{
   grid-column:1 / -1; display:flex; align-items:center; gap:.7rem;
   margin:.4rem 0 -.6rem; padding-left:56px;
@@ -304,7 +310,10 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .note p{ margin:0 0 .7rem; font-size:.92rem; color:var(--bone-dim); font-weight:300; }
 .note p:last-child{ margin-bottom:0; }
 .note strong{ color:var(--bone); font-weight:600; }
+.note em{ color:var(--bone); font-style:italic; }
 .note code{ font-family:var(--f-mono); font-size:.82em; color:var(--amber); }
+.note a{ color:var(--amber); text-decoration:none; border-bottom:1px solid rgba(242,169,59,.35); }
+.note a:hover{ color:var(--ember-hot); }
 
 .checklist{ list-style:none; margin:0; padding:0; }
 .checklist li{
@@ -313,9 +322,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
   color:var(--bone-dim); font-weight:300;
 }
 .checklist li:last-child{ border-bottom:0; padding-bottom:0; }
-.checklist li::before{
-  content:"☐"; color:var(--bone-faint); font-size:.95rem; line-height:1.5;
-}
+.checklist li::before{ content:"☐"; color:var(--bone-faint); font-size:.95rem; line-height:1.5; }
 .checklist b{ color:var(--bone); font-weight:600; }
 .checklist a{ color:var(--amber); text-decoration:none; border-bottom:1px solid rgba(242,169,59,.35); }
 .checklist a:hover{ color:var(--ember-hot); }
@@ -325,13 +332,13 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .foot p{ font-family:var(--f-mono); font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--bone-faint); margin:0 0 .55rem; line-height:1.9; }
 .foot p:last-child{ margin-bottom:0; }
 .foot .rule{ color:var(--ember); }
+.foot em{ color:var(--bone-dim); }
 
 /* ── Entrance choreography ─────────────────────────────────────────── */
 @media (prefers-reduced-motion:no-preference){
   .rise{ opacity:0; transform:translateY(16px); animation:rise .8s cubic-bezier(.22,1,.36,1) forwards; }
   @keyframes rise{ to{ opacity:1; transform:none; } }
-  .d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}
-  .d4{animation-delay:.3s}.d5{animation-delay:.38s}
+  .d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}.d4{animation-delay:.3s}
 
   .reveal{ opacity:0; transform:translateY(20px); transition:opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1); }
   .reveal.in{ opacity:1; transform:none; }
@@ -340,7 +347,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 ::selection{ background:var(--ember); color:var(--asphalt); }
 a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offset:3px; }
 
-/* ── Print: a roadbook you can fold into a tank bag ────────────────── */
+/* ── Print: fold it into the tank bag ──────────────────────────────── */
 @media print{
   body{ background:#fff; color:#000; }
   body::before, body::after, .topbar, .mapcard__frame, .actions{ display:none!important; }
@@ -360,38 +367,38 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
   <!-- ══ TOPBAR ══════════════════════════════════════════════════════ -->
   <header class="topbar">
     <div class="topbar__mark">Roadbook<span>.</span></div>
-    <div class="topbar__meta">Sun 06 · 09 · 2026 — Garraf &amp; the Litoral</div>
+    <div class="topbar__meta">Sun 06 · 09 · 2026 — Montjuïc &amp; the Litoral</div>
     <a class="topbar__cta"
-       href="https://www.google.com/maps/dir/?api=1&origin=Carrer+d%27Olzinelles+114%2C+Barcelona&destination=Restaurant+Els+Pescadors%2C+Pla%C3%A7a+de+Prim+1%2C+Barcelona&waypoints=Castelldefels%7CGarraf%2C+Sitges%7CSitges%7CSakya+Tashi+Ling%2C+Olivella%7COlesa+de+Bonesvalls%7CGav%C3%A0%7CCarrer+de+Lope+de+Vega+93%2C+Barcelona%7CParc+del+F%C3%B2rum%2C+Barcelona&travelmode=driving"
+       href="https://www.google.com/maps/dir/?api=1&origin=Carrer+d%27Olzinelles+114%2C+Barcelona&destination=Restaurant+Els+Pescadors%2C+Pla%C3%A7a+de+Prim+1%2C+Barcelona&waypoints=Avinguda+de+l%27Estadi%2C+Barcelona%7CMirador+de+l%27Alcalde%2C+Barcelona%7CVallvidrera%2C+Barcelona%7CCarrer+del+Clot+41%2C+Barcelona%7CCarrer+de+Lope+de+Vega+93%2C+Barcelona%7CPasseig+de+Joan+de+Borb%C3%B3%2C+Barcelona%7CParc+del+F%C3%B2rum%2C+Barcelona&travelmode=driving"
        target="_blank" rel="noopener">Open route</a>
   </header>
 
   <!-- ══ HERO ════════════════════════════════════════════════════════ -->
   <section class="hero wrap">
     <div class="hero__plate rise d1">
-      <span class="n">01</span>
-      <span class="t">Sunday 6 September 2026 · Barcelona</span>
+      <span class="n">125</span>
+      <span class="t">Sunday 6 September 2026 · City limits only</span>
     </div>
 
     <h1 class="rise d2">
-      Garraf<br>
+      Montjuïc<br>
       <span class="amp">&amp;</span> the<br>
       <span class="line2">Litoral</span>
     </h1>
 
     <p class="hero__lede rise d3">
-      Nine hours, one hundred and fifty kilometres, and a hard rule: <strong>nothing on this
-      page is a place you'd find on a postcard rack.</strong> It opens with the fork-and-knife
-      breakfast that Catalan riders actually stop for, climbs the cliff road to a Buddhist
-      monastery hidden in the Garraf massif, and comes home along the sea with the sun going
-      down over the water.
+      Nine hours and <strong>not one metre outside Barcelona.</strong> It opens with the fork-and-knife
+      breakfast that Catalan riders actually stop for, traces what's left of the old Montjuïc
+      Grand Prix circuit, climbs to Vallvidrera, drinks vermut in a bar that's been pouring it
+      since 1963 — and comes home along the water while the sun goes down <em>behind</em> the hills
+      you rode that afternoon.
     </p>
 
     <div class="stats rise d4">
-      <div class="stat"><div class="stat__v">150<small style="font-size:.5em; letter-spacing:0"> km</small></div><div class="stat__k">Total distance</div></div>
-      <div class="stat"><div class="stat__v">86</div><div class="stat__k">Curves on the C-31</div></div>
+      <div class="stat"><div class="stat__v">55<small> km</small></div><div class="stat__k">All inside the city</div></div>
+      <div class="stat"><div class="stat__v">0<small> km</small></div><div class="stat__k">Of motorway</div></div>
       <div class="stat"><div class="stat__v">9</div><div class="stat__k">Stops, all Sunday-open</div></div>
-      <div class="stat"><div class="stat__v">20:20</div><div class="stat__k">Sunset over the sea</div></div>
+      <div class="stat"><div class="stat__v">20:16</div><div class="stat__k">Sunset, due west</div></div>
     </div>
   </section>
 
@@ -405,16 +412,16 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
     <div class="mapcard reveal">
       <div class="mapcard__frame">
         <iframe
-          title="Overview map of the Garraf and Litoral motorcycle route"
+          title="Overview map of the Montjuïc and Litoral motorcycle route inside Barcelona"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          src="https://maps.google.com/maps?saddr=Carrer+d%27Olzinelles+114,Barcelona&daddr=Castelldefels+to:Garraf,Sitges+to:Sitges+to:Plana+Novella,Olivella+to:Olesa+de+Bonesvalls+to:Gava+to:Carrer+de+Lope+de+Vega+93,Barcelona+to:Parc+del+Forum,Barcelona+to:Placa+de+Prim+1,Barcelona&output=embed">
+          src="https://maps.google.com/maps?saddr=Carrer+d%27Olzinelles+114,Barcelona&daddr=Avinguda+de+l%27Estadi,Barcelona+to:Mirador+de+l%27Alcalde,Barcelona+to:Vallvidrera,Barcelona+to:Carrer+del+Clot+41,Barcelona+to:Carrer+de+Lope+de+Vega+93,Barcelona+to:Passeig+de+Joan+de+Borbo,Barcelona+to:Parc+del+Forum,Barcelona+to:Placa+de+Prim+1,Barcelona&output=embed">
         </iframe>
       </div>
       <div class="mapcard__foot">
-        <span class="mapcard__note">Sants → Garraf → Olivella → Gavà → Poblenou → Fòrum</span>
+        <span class="mapcard__note">Sants → Montjuïc → Vallvidrera → El Clot → Poblenou → Barceloneta → Fòrum</span>
         <a class="btn"
-           href="https://www.google.com/maps/dir/?api=1&origin=Carrer+d%27Olzinelles+114%2C+Barcelona&destination=Restaurant+Els+Pescadors%2C+Pla%C3%A7a+de+Prim+1%2C+Barcelona&waypoints=Castelldefels%7CGarraf%2C+Sitges%7CSitges%7CSakya+Tashi+Ling%2C+Olivella%7COlesa+de+Bonesvalls%7CGav%C3%A0%7CCarrer+de+Lope+de+Vega+93%2C+Barcelona%7CParc+del+F%C3%B2rum%2C+Barcelona&travelmode=driving"
+           href="https://www.google.com/maps/dir/?api=1&origin=Carrer+d%27Olzinelles+114%2C+Barcelona&destination=Restaurant+Els+Pescadors%2C+Pla%C3%A7a+de+Prim+1%2C+Barcelona&waypoints=Avinguda+de+l%27Estadi%2C+Barcelona%7CMirador+de+l%27Alcalde%2C+Barcelona%7CVallvidrera%2C+Barcelona%7CCarrer+del+Clot+41%2C+Barcelona%7CCarrer+de+Lope+de+Vega+93%2C+Barcelona%7CPasseig+de+Joan+de+Borb%C3%B3%2C+Barcelona%7CParc+del+F%C3%B2rum%2C+Barcelona&travelmode=driving"
            target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
           Navigate full day
@@ -443,29 +450,31 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
             <span class="tag tag--book">Book ahead</span>
           </div>
           <h3>El Cullerot <em>de Sants</em></h3>
-          <div class="stop__where"><b>Carrer d'Olzinelles 114</b> · Sants-Montjuïc, 08014 Barcelona</div>
+          <div class="stop__where"><b>Carrer d'Olzinelles 114</b> · Sants-Montjuïc, 08014 · <b>934 31 90 69</b></div>
 
           <p>
-            Half past eleven is not lunch in Catalonia — it is <em>esmorzar de forquilla</em>,
-            the fork-and-knife breakfast that Sunday riders have been eating for a century.
-            Heavy, slow-cooked, unfashionable, and exactly the right way to start a day on a bike.
+            Half past eleven is not lunch in Catalonia. It is <em>esmorzar de forquilla</em> —
+            the fork-and-knife breakfast that riders have been eating before a Sunday run for a
+            century. Heavy, slow-cooked, unfashionable, and the correct way to start a day on a bike.
           </p>
           <p>
-            El Cullerot is a tiny neighbourhood room in La Bordeta with the menu chalked up in
-            Catalan only — which is the local shorthand for <strong>this place is not for you if
-            you're here for three days</strong>. Roughly seventy euros for four, all in.
+            El Cullerot is a small room in La Bordeta with the board chalked up in Catalan only,
+            which is the local shorthand for <strong>this place is not for people who are here for three
+            days.</strong> It also sits at the foot of Montjuïc, which is where you're going next.
           </p>
 
           <div class="order">
             <b>Order this</b>
             Cap i pota, or the peus de porc if they have them. The weekend menu costs a couple of
-            euros more precisely because the heavy dishes only appear Saturday and Sunday.
+            euros more precisely because the heavy dishes only appear on Saturday and Sunday.
           </div>
 
           <div class="order order--warn">
-            <b>Non-negotiable</b>
-            It seats almost nobody and it is always full. Call and book, or you will be starting
-            your day standing on the pavement.
+            <b>Book it, and have a backup</b>
+            It seats almost nobody and it is always full. Its Sunday hours are consistent across
+            listings but I couldn't confirm them against a primary source — so if the phone doesn't
+            answer, <strong>Ca la Montse</strong> in Barceloneta (Sun 10:00–16:00) is confirmed on its own
+            site and takes bookings online.
           </div>
 
           <div class="actions">
@@ -474,238 +483,210 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
               Maps
             </a>
-          </div>
-        </div>
-        <div class="leg"><span class="chev">››</span> 13:00 — roll out · Sants → Castelldefels via the C-245 · 35 min</div>
-      </article>
-
-      <!-- 02 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--ride reveal">
-        <div class="stop__plate">02</div>
-        <div class="stop__time">13:40 <small>25 min ride</small></div>
-        <div class="stop__body">
-          <div class="tags">
-            <span class="tag tag--ride">The road</span>
-            <span class="tag">C-31 · Les Costes del Garraf</span>
-          </div>
-          <h3>The Cliff <em>Road</em></h3>
-          <div class="stop__where"><b>C-31</b> · Castelldefels → Garraf → Sitges · no toll, no hurry</div>
-
-          <p>
-            The corniche. Eighty-six corners cut into the rock with the Mediterranean straight
-            down on your left and nothing between you and it but a low wall. The fast toll road
-            runs inland; everybody sensible pays the toll, which is why this one stays empty of
-            trucks.
-          </p>
-
-          <div class="order order--warn">
-            <b>Ride it calm — this matters</b>
-            The RACC puts the C-31 among Catalonia's ten most dangerous roads, and motorcyclists
-            are in the <strong>majority</strong> of its serious accidents. On a September Sunday it is
-            also thick with road cyclists. Single carriageway, no shoulder, blind rock corners.
-            Enjoy the view; do not chase the corner.
-          </div>
-
-          <div class="actions">
-            <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/dir/?api=1&origin=Castelldefels&destination=Garraf%2C+Sitges&travelmode=driving">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Ride the C-31
-            </a>
-          </div>
-        </div>
-        <div class="leg"><span class="chev">››</span> Pull off at the km 169.5 parking · 5 min</div>
-      </article>
-
-      <!-- 03 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--walk reveal">
-        <div class="stop__plate">03</div>
-        <div class="stop__time">14:05 <small>15 min</small></div>
-        <div class="stop__body">
-          <div class="tags">
-            <span class="tag tag--walk">Park &amp; walk</span>
-            <span class="tag">Real parking</span>
-          </div>
-          <h3>Mirador de <em>Cala Morisca</em></h3>
-          <div class="stop__where"><b>C-31, km 169.5</b> · Garraf massif, above the water</div>
-
-          <p>
-            Most of the pull-offs along this stretch are informal scrapes in the gravel on a
-            blind corner. This one is an actual parking area, which is why it's the only viewpoint
-            in this roadbook. Clifftop, open sea, the coast running away south toward Tarragona.
-          </p>
-          <p>
-            Fifteen minutes. Helmet off, look at it properly, get back on.
-          </p>
-
-          <div class="actions">
-            <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/search/?api=1&query=Cala+Morisca%2C+Garraf%2C+Sitges">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Maps
-            </a>
-          </div>
-        </div>
-        <div class="leg"><span class="chev">››</span> Down into Garraf hamlet · 5 min</div>
-      </article>
-
-      <!-- 04 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--eat reveal">
-        <div class="stop__plate">04</div>
-        <div class="stop__time">14:25 <small>35 min</small></div>
-        <div class="stop__body">
-          <div class="tags">
-            <span class="tag tag--eat">Coffee</span>
-            <span class="tag tag--open">Daily 11:00–00:00</span>
-            <span class="tag tag--walk">Moto parking</span>
-          </div>
-          <h3>El Chiringuito <em>de Garraf</em></h3>
-          <div class="stop__where"><b>Avinguda Llorach 5</b> · 08871 Garraf</div>
-
-          <p>
-            Garraf is nine hundred people, a rank of striped 1920s bathing huts, and a beach the
-            train stops at. The chiringuito sits on the sand with a proper motorcycle area beside
-            the old beach tunnel, which tells you exactly who its customers are.
-          </p>
-          <p>
-            A cortado, maybe a vermut if you're not the one riding fastest. Boots off, feet in
-            the sand. This is the halfway pause, not a meal — you have a monastery to get to.
-          </p>
-
-          <div class="actions">
-            <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/search/?api=1&query=El+Chiringuito+de+Garraf%2C+Avinguda+Llorach+5%2C+Garraf">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Maps
-            </a>
-          </div>
-        </div>
-        <div class="leg"><span class="chev">››</span> C-31 south into Sitges · 10 min</div>
-      </article>
-
-      <!-- 05 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--walk reveal">
-        <div class="stop__plate">05</div>
-        <div class="stop__time">15:10 <small>40 min</small></div>
-        <div class="stop__body">
-          <div class="tags">
-            <span class="tag tag--walk">Park &amp; walk</span>
-            <span class="tag tag--open">Shops open Sunday</span>
-          </div>
-          <h3>Sitges, <em>the back streets</em></h3>
-          <div class="stop__where"><b>Carrer Major &amp; Carrer d'en Bosch</b> · behind the Sant Bartomeu church</div>
-
-          <p>
-            Sitges has a seafront promenade that belongs to the cruise crowd, and a knot of old
-            streets behind the church that doesn't. Park the bikes, walk <em>away</em> from the
-            water, and stay in the lanes around Carrer Major.
-          </p>
-          <p>
-            Sitges holds a <strong>llibertat d'horaris</strong> exemption, so unlike most of
-            Catalonia the shops and bars are genuinely open on a Sunday afternoon. Forty minutes.
-            Don't sit down for a meal here — dinner is worth waiting for.
-          </p>
-
-          <div class="actions">
-            <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/search/?api=1&query=Esgl%C3%A9sia+de+Sant+Bartomeu+i+Santa+Tecla%2C+Sitges">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Maps
-            </a>
-          </div>
-        </div>
-        <div class="leg"><span class="chev">››</span> Inland &amp; up · BV-2111 through Plana Novella · 20 min of switchbacks</div>
-      </article>
-
-      <!-- 06 ─────────────────────────────────────────────────────── -->
-      <article class="stop stop--walk reveal">
-        <div class="stop__plate">06</div>
-        <div class="stop__time">16:20 <small>50 min</small></div>
-        <div class="stop__body">
-          <div class="tags">
-            <span class="tag tag--walk">Park &amp; walk</span>
-            <span class="tag tag--open">Sun 10:00–18:00</span>
-            <span class="tag tag--call">Call first</span>
-          </div>
-          <h3>Sakya Tashi Ling <em>monastery</em></h3>
-          <div class="stop__where"><b>Palau Novella, Plana Novella</b> · Olivella, inside the Parc del Garraf · 41°17′30″N 1°51′09″E</div>
-
-          <p>
-            An 1890 Catalan modernist mansion, marooned in a limestone valley in the middle of a
-            natural park, bought by a Buddhist community in 1996 and turned into a working
-            monastery. The road in — the BV-2111 up through Plana Novella — is worth the ticket
-            on its own.
-          </p>
-          <p>
-            Nobody stumbles onto this. It is the strangest thing you will see all day and it is
-            forty minutes from a beach bar.
-          </p>
-
-          <div class="order order--warn">
-            <b>Phone ahead — sources disagree</b>
-            The monastery's own site lists Sunday 10:00–18:00 with guided tours at 11:00, 12:00,
-            13:00 and 16:30 (€9 / €7); the Catalan press lists a longer day and more tours.
-            It also <strong>closes without notice for retreats</strong>. Ring <code>+34 93 743 20 10</code>
-            on Saturday. The 16:30 tour is the one that fits.
-          </div>
-
-          <div class="actions">
-            <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/search/?api=1&query=Sakya+Tashi+Ling%2C+Palau+Novella%2C+Olivella">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Maps
-            </a>
-            <a class="btn btn--ghost" href="tel:+34937432010">
+            <a class="btn btn--ghost" href="tel:+34934319069">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a1 1 0 0 1-1 1A17 17 0 0 1 4 4a1 1 0 0 1 1-1Z"/></svg>
               Call
             </a>
           </div>
         </div>
-        <div class="leg"><span class="chev">››</span> Olivella → Olesa de Bonesvalls → the BV-2411 down to Gavà · 55 min</div>
+        <div class="leg"><span class="chev">››</span> 13:00 — roll out · Sants up onto the mountain · 10 min</div>
       </article>
 
-      <!-- 07 ─────────────────────────────────────────────────────── -->
+      <!-- 02 ─────────────────────────────────────────────────────── -->
       <article class="stop stop--ride reveal">
-        <div class="stop__plate">07</div>
-        <div class="stop__time">17:20 <small>60 min ride</small></div>
+        <div class="stop__plate">02</div>
+        <div class="stop__time">13:15 <small>40 min</small></div>
         <div class="stop__body">
           <div class="tags">
             <span class="tag tag--ride">The road</span>
-            <span class="tag">BV-2411 · the locals' way home</span>
+            <span class="tag">Circuit de Montjuïc · 1969–1975</span>
           </div>
-          <h3>Over the <em>back of the massif</em></h3>
-          <div class="stop__where"><b>BV-2411</b> · Olesa de Bonesvalls → Gavà, then the C-31 north into the city</div>
+          <h3>The old <em>circuit</em></h3>
+          <div class="stop__where"><b>Avinguda de l'Estadi → Avinguda de Miramar</b> · Montjuïc</div>
 
           <p>
-            Rather than double back down the coast road you've already ridden, drop over the
-            inland side of the Garraf. Open plateau, pine, almost no traffic, and a long descent
-            into Gavà. This is the road Barcelona riders name when you ask them where they go
-            after work.
+            Four Formula One Grands Prix and decades of motorcycle racing ran on these public
+            roads. The <em>Recta de l'Estadi</em> was the pit straight. The <em>Revolt de Miramar</em>
+            is still there, still off-camber, still with the whole port opening up underneath it
+            as you come out.
           </p>
           <p>
-            You come into the city from the south-west, past the port, and pick up the water at
-            Barceloneta — which is exactly where you want to be at half past six.
+            Nobody has raced here since 1975 and there is no plaque worth stopping for. You just
+            ride Avinguda de l'Estadi, drop round onto Miramar, and know what you're on. Do it
+            twice. Then do it once more, slowly, and look down at the water instead.
           </p>
+
+          <div class="order order--warn">
+            <b>Two caveats, honestly</b>
+            Passeig Olímpic and Avinguda dels Montanyans get called "the circuit" online — neither
+            was part of the 1969–75 lap, so don't chase a perfect reconstruction. And Montjuïc's
+            roads close for events (football at the Estadi Olímpic, city spectaculars). No standing
+            Sunday closure exists, but <strong>check the event calendar the week before.</strong>
+          </div>
 
           <div class="actions">
             <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/dir/?api=1&origin=Olesa+de+Bonesvalls&destination=Gav%C3%A0&travelmode=driving">
+               href="https://www.google.com/maps/dir/?api=1&origin=Avinguda+de+l%27Estadi%2C+Barcelona&destination=Avinguda+de+Miramar%2C+Barcelona&travelmode=driving">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-              Ride the BV-2411
+              Ride the lap
             </a>
           </div>
         </div>
-        <div class="leg"><span class="chev">››</span> Into Barcelona · Barceloneta · 18:20</div>
+        <div class="leg"><span class="chev">››</span> Park at the mirador · 5 min</div>
       </article>
 
-      <!-- 08 ─────────────────────────────────────────────────────── -->
+      <!-- 03 ─────────────────────────────────────────────────────── -->
+      <article class="stop stop--walk reveal">
+        <div class="stop__plate">03</div>
+        <div class="stop__time">14:00 <small>50 min</small></div>
+        <div class="stop__body">
+          <div class="tags">
+            <span class="tag tag--walk">Park &amp; walk</span>
+            <span class="tag tag--open">Free · 08:00–21:00</span>
+          </div>
+          <h3>Cactus, <em>and the whole port</em></h3>
+          <div class="stop__where"><b>Jardins de Mossèn Costa i Llobera</b> + <b>Mirador de l'Alcalde</b> · Montjuïc</div>
+
+          <p>
+            One of Europe's great cactus collections, planted on a south-facing slope above the
+            container cranes, free to walk into, and almost always empty because everybody queues
+            for the castle two hundred metres uphill instead.
+          </p>
+          <p>
+            Walk it, then stand at the Mirador de l'Alcalde and look at the port working on a
+            Sunday. Free moto parking along Carrer dels Tarongers and the Passeig del Migdia.
+          </p>
+
+          <div class="order">
+            <b>Skip the castle</b>
+            The old "free on Sunday afternoons" rule doesn't appear anywhere in the Castell's
+            current 2026 admissions sheet — you'd pay full price to join a queue. The gardens are
+            better and cost nothing.
+          </div>
+
+          <div class="actions">
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/search/?api=1&query=Jardins+de+Mossen+Costa+i+Llobera%2C+Barcelona">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              Gardens
+            </a>
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/search/?api=1&query=Mirador+de+l%27Alcalde%2C+Barcelona">
+              Mirador
+            </a>
+          </div>
+        </div>
+        <div class="leg"><span class="chev">››</span> Across the city · Sants → Les Corts → Sarrià → Avinguda del Tibidabo · 30 min</div>
+      </article>
+
+      <!-- 04 ─────────────────────────────────────────────────────── -->
+      <article class="stop stop--ride stop--optional reveal">
+        <div class="stop__plate">04</div>
+        <div class="stop__time">15:30 <small>75 min</small></div>
+        <div class="stop__body">
+          <div class="tags">
+            <span class="tag tag--ride">The climb</span>
+            <span class="tag tag--call">Check before you go</span>
+            <span class="tag">Optional leg</span>
+          </div>
+          <h3>Up to <em>Vallvidrera</em></h3>
+          <div class="stop__where"><b>Avinguda del Tibidabo → Carretera de Vallvidrera al Tibidabo</b> · descend by the Arrabassada</div>
+
+          <p>
+            Barcelona's own mountain road, still inside the city boundary. Hairpins under the pines,
+            the whole grid laid out below you through the gaps, and a 125 is genuinely the right
+            tool for it — you'll be in the fat of the powerband where a big bike is just short-shifting.
+          </p>
+          <p>
+            Stop in Vallvidrera village — it feels like a hill town that Barcelona happened to
+            grow underneath. <strong>Antiga Casa Trampa</strong>, on the plaça, has been there since 1882
+            and is open Sunday until 17:00. Come down the Carretera de l'Arrabassada.
+          </p>
+
+          <div class="order order--warn">
+            <b>This leg may not exist on the day</b>
+            Collserola's natural environment has been <strong>closed since March 2026 for African swine
+            fever</strong>, with no reopening date announced. Paved through-roads are exempt, so the climb
+            itself should be legal — but trails and forest access are not, and the situation is live.
+            <strong>Check <code>parcnaturalcollserola.cat</code> the week before.</strong> If it's shut,
+            skip straight to vermut and give Montjuïc the extra hour.
+          </div>
+
+          <div class="order order--warn">
+            <b>Carretera de les Aigües is banned</b>
+            Everyone recommends it. It is closed to motor vehicles — Collserola park ordinance
+            article 14, and named again under the swine-fever order. Don't.
+          </div>
+
+          <div class="actions">
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/dir/?api=1&origin=Avinguda+del+Tibidabo%2C+Barcelona&destination=Vallvidrera%2C+Barcelona&travelmode=driving">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              Ride the climb
+            </a>
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://parcnaturalcollserola.cat/actualitat/avisos/">
+              Park closure notices
+            </a>
+          </div>
+        </div>
+        <div class="leg"><span class="chev">››</span> Down the Arrabassada, across to El Clot · 25 min</div>
+      </article>
+
+      <!-- 05 ─────────────────────────────────────────────────────── -->
       <article class="stop stop--eat reveal">
-        <div class="stop__plate">08</div>
-        <div class="stop__time">18:55 <small>40 min</small></div>
+        <div class="stop__plate">05</div>
+        <div class="stop__time">17:15 <small>45 min</small></div>
+        <div class="stop__body">
+          <div class="tags">
+            <span class="tag tag--eat">Vermut</span>
+            <span class="tag tag--open">Open Sunday</span>
+            <span class="tag tag--call">Closing time unclear</span>
+          </div>
+          <h3>Bar <em>Rovira</em></h3>
+          <div class="stop__where"><b>Carrer del Clot 41</b> · El Clot, Sant Martí · <b>93 245 10 62</b> · family-run since 1963</div>
+
+          <p>
+            The vermut hour is the most Catalan thing that happens on a Sunday, and it has been
+            comprehensively colonised in Gràcia and on Passeig de Sant Joan. El Clot has not been.
+            Bar Rovira has been in the same family for sixty years and the local press keeps
+            writing pieces that amount to <em>go here instead.</em>
+          </p>
+          <p>
+            A vermut with the soda and the olive, sitting on a terrace on an ordinary street where
+            nothing is happening. This is the pause in the middle of the day, and the whole reason
+            not to leave the city.
+          </p>
+
+          <div class="order order--warn">
+            <b>One unresolved detail</b>
+            Everything confirms they're open Sunday; nothing agrees on when they close. One listing
+            implies terrace service only. Ring ahead if you're arriving late.
+          </div>
+
+          <div class="actions">
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/search/?api=1&query=Bar+Rovira%2C+Carrer+del+Clot+41%2C+Barcelona">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              Maps
+            </a>
+            <a class="btn btn--ghost" href="tel:+34932451062">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a1 1 0 0 1-1 1A17 17 0 0 1 4 4a1 1 0 0 1 1-1Z"/></svg>
+              Call
+            </a>
+          </div>
+        </div>
+        <div class="leg"><span class="chev">››</span> El Clot down into Poblenou · 10 min</div>
+      </article>
+
+      <!-- 06 ─────────────────────────────────────────────────────── -->
+      <article class="stop stop--eat reveal">
+        <div class="stop__plate">06</div>
+        <div class="stop__time">18:15 <small>40 min</small></div>
         <div class="stop__body">
           <div class="tags">
             <span class="tag tag--eat">Cheesecake</span>
-            <span class="tag tag--call">Hours unconfirmed</span>
+            <span class="tag tag--call">Confirm hours first</span>
           </div>
           <h3>Jon Cake <em>Poblenou</em></h3>
           <div class="stop__where"><b>Carrer de Lope de Vega 93</b> · Poblenou · their largest shop, ~350 m²</div>
@@ -713,13 +694,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
           <p>
             Jon García trained at El Celler de Can Roca, quit aeronautical engineering at
             twenty-seven, and now makes the cheesecake the whole city queues for. Baked that
-            morning, sold by weight, a rotating flavour every fortnight alongside the classic.
+            morning, sold by weight, a new flavour every fortnight beside the classic.
           </p>
           <p>
-            Take the Poblenou branch, not the Born one — the Born shop has a queue down the
-            street and you'd be parking a motorcycle in Ciutat Vella's restricted zone.
-            Poblenou is on the Cerdà grid, five minutes off the seafront, and you're going to be
-            eating dinner three streets away.
+            Take Poblenou, not the Born original — the Born shop has a queue down the street and
+            you'd be trying to park a bike in Ciutat Vella's restricted zone. Poblenou is on the
+            open grid, five minutes from the water, and dinner is three streets away.
           </p>
 
           <div class="order">
@@ -728,11 +708,12 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
           </div>
 
           <div class="order order--warn">
-            <b>Two things to know</b>
-            The Poblenou hours (08:00–20:00 daily) come from press coverage of the opening, not
-            from a live listing — <strong>check the day before</strong>. If it's shut, the
-            Santa Caterina shop at Carrer de Sant Pere Més Baix 36 is officially open daily
-            10:00–20:00 and takes the same detour.
+            <b>Ring the day before</b>
+            The Poblenou hours (08:00–20:00 daily) trace back to a single press piece from the
+            opening, not a live listing. The <strong>Santa Caterina</strong> shop at Sant Pere Més Baix 36
+            has Sunday 10:00–20:00 corroborated across four independent listings — it's the safer
+            bet if you can't confirm, though you'll be walking in from a moto bay outside the
+            old town.
           </div>
 
           <div class="actions">
@@ -747,56 +728,94 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
             </a>
           </div>
         </div>
-        <div class="leg"><span class="chev">››</span> Back to the water for the light · 19:40</div>
+        <div class="leg"><span class="chev">››</span> Down to the water at Barceloneta · 15 min</div>
       </article>
 
-      <!-- 09 ─────────────────────────────────────────────────────── -->
+      <!-- 07 ─────────────────────────────────────────────────────── -->
+      <article class="stop stop--walk reveal">
+        <div class="stop__plate">07</div>
+        <div class="stop__time">19:15 <small>35 min</small></div>
+        <div class="stop__body">
+          <div class="tags">
+            <span class="tag tag--walk">Park &amp; walk</span>
+            <span class="tag">Free moto bays</span>
+          </div>
+          <h3>Feet in the <em>Barceloneta</em></h3>
+          <div class="stop__where"><b>Passeig de Joan de Borbó</b> · park in the white-line bays, walk to the sand</div>
+
+          <p>
+            Ride down Joan de Borbó with the fishing marina on your right — <strong>stay out of the bus
+            lanes</strong>, motorcycles have been banned from them here since 2011. Park in a free
+            white-line moto bay, walk across, and stand on the beach for half an hour with your
+            boots off.
+          </p>
+          <p>
+            You're facing east-southeast. The sun is behind you, dropping toward Collserola —
+            toward the road you were riding four hours ago. That's the whole shape of this day,
+            and you can see both ends of it from here.
+          </p>
+
+          <div class="actions">
+            <a class="btn btn--ghost" target="_blank" rel="noopener"
+               href="https://www.google.com/maps/search/?api=1&query=Passeig+de+Joan+de+Borb%C3%B3%2C+Barcelona">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              Maps
+            </a>
+            <a class="btn btn--ghost" target="_blank" rel="noopener" href="https://areaverda.cat/en/motorcycles">
+              Find a moto bay
+            </a>
+          </div>
+        </div>
+        <div class="leg"><span class="chev">››</span> Turn east into the golden hour · 19:50</div>
+      </article>
+
+      <!-- 08 ─────────────────────────────────────────────────────── -->
       <article class="stop stop--ride reveal">
-        <div class="stop__plate">09</div>
-        <div class="stop__time">19:40 <small>40 min</small></div>
+        <div class="stop__plate">08</div>
+        <div class="stop__time">19:50 <small>45 min</small></div>
         <div class="stop__body">
           <div class="tags">
             <span class="tag tag--ride">Golden hour</span>
-            <span class="tag tag--walk">Park &amp; walk</span>
-            <span class="tag tag--open">Sunset 20:20</span>
+            <span class="tag tag--open">Sunset 20:16</span>
+            <span class="tag">~8.5 km</span>
           </div>
           <h3>The <em>seafront</em> run</h3>
-          <div class="stop__where"><b>Joan de Borbó → Passeig Marítim (upper) → Avinguda del Litoral → Fòrum</b> · ~8.5 km</div>
+          <div class="stop__where"><b>Joan de Borbó → Avinguda del Litoral → Parc del Fòrum</b> · then back to Plaça de Prim</div>
 
           <p>
-            The whole day has been pointing at this. Start at Passeig de Joan de Borbó with the
-            marina on your right, climb onto the upper vehicle level of the Passeig Marítim past
-            the Hospital del Mar, and then run <em>Avinguda del Litoral</em> east with Bogatell,
-            Mar Bella and Nova Mar Bella opening up beside you.
+            The whole day has been aimed at this. Pick up <em>Avinguda del Litoral</em> and run east
+            with Bogatell, Mar Bella and Nova Mar Bella opening beside you, the light going long
+            and orange across your right shoulder, the sea ahead turning the colour of the sky.
           </p>
           <p>
-            Park at Plaça del Fòrum — there are dedicated motorcycle bays by the CCIB — and walk
-            out to the Zona de Banys for the last of it. Sunset is at <strong>20:20</strong>.
-            Then turn around and ride back into Poblenou with the light behind you.
+            Sunset is <strong>20:16, due west</strong> — behind you, behind Collserola. What you get out here
+            is the afterglow on the water and the whole beachfront in it. Turn at the Fòrum, park
+            among the moto bays by the CCIB if you want the last of it, then double back into
+            Poblenou.
           </p>
 
           <div class="order order--warn">
             <b>Ride the avenue, not the promenade</b>
-            The beachfront promenades at Bogatell and Mar Bella are pedestrian and cycle only —
-            <strong>Avinguda del Litoral, one block back, is your legal line.</strong> And don't take the
-            Ronda Litoral (B-10) by mistake: it's the elevated ring road, perfectly legal and
-            completely pointless for this.
+            <strong>Passeig Marítim de la Barceloneta is pedestrian now — both levels.</strong> So are the
+            Bogatell and Mar Bella promenades. Avinguda del Litoral, one block back, is the legal
+            line, and it's a proper 50 km/h road. Don't confuse it with the <em>Ronda</em> Litoral
+            (B-10), the elevated ring road — legal on a 125, pointless for this.
           </div>
 
           <div class="actions">
             <a class="btn btn--ghost" target="_blank" rel="noopener"
-               href="https://www.google.com/maps/dir/?api=1&origin=Passeig+de+Joan+de+Borb%C3%B3%2C+Barcelona&destination=Parc+del+F%C3%B2rum%2C+Barcelona&waypoints=Passeig+Mar%C3%ADtim+de+la+Barceloneta%2C+Barcelona%7CAvinguda+del+Litoral%2C+Barcelona&travelmode=driving">
+               href="https://www.google.com/maps/dir/?api=1&origin=Passeig+de+Joan+de+Borb%C3%B3%2C+Barcelona&destination=Parc+del+F%C3%B2rum%2C+Barcelona&waypoints=Avinguda+del+Litoral%2C+Barcelona&travelmode=driving">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
               Ride the litoral
             </a>
           </div>
         </div>
-        <div class="leg"><span class="chev">››</span> Back to Poblenou · Plaça de Prim · 20:45</div>
+        <div class="leg"><span class="chev">››</span> Back to Poblenou · Plaça de Prim · 20:40</div>
       </article>
 
-      <!-- 10 ─────────────────────────────────────────────────────── -->
+      <!-- 09 ─────────────────────────────────────────────────────── -->
       <article class="stop stop--eat reveal">
-        <div class="stop__plate">10</div>
+        <div class="stop__plate">09</div>
         <div class="stop__time">20:45 <small>Dinner</small></div>
         <div class="stop__body">
           <div class="tags">
@@ -805,17 +824,17 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
             <span class="tag tag--book">Reserve now</span>
           </div>
           <h3>Els <em>Pescadors</em></h3>
-          <div class="stop__where"><b>Plaça de Prim 1</b> · Poblenou · a fishermen's square under old ombú trees</div>
+          <div class="stop__where"><b>Plaça de Prim 1</b> · Poblenou · <b>932 25 20 18</b> · a fishermen's square under old ombú trees</div>
 
           <p>
             Forty years ago this was a neighbourhood bar on a cobbled square in the old fishing
-            quarter. It is now the seafood restaurant that Barcelona keeps for itself — no
-            picture menus, no Port Vell, no one outside trying to walk you in.
+            quarter. It is now the seafood restaurant Barcelona keeps for itself — no picture
+            menus, no Port Vell, nobody outside trying to walk you in.
           </p>
           <p>
-            The square is a hundred metres across, lit under two enormous trees, and the ride
-            finishes with everyone sitting at one table in it. Reckon on <strong>€55–70 a head</strong>
-            with wine. The kitchen shuts at 22:15, so 20:45 is the right hour, not a suggestion.
+            The square is a hundred metres across, lit under two enormous trees, and the day ends
+            with everyone at one table in the middle of it. Reckon on <strong>€55–70 a head</strong> with
+            wine. The kitchen stops at 22:15, so 20:45 is the hour, not a suggestion.
           </p>
 
           <div class="order">
@@ -827,7 +846,8 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
           <div class="order order--warn">
             <b>Reserve today</b>
             A table for six on a September Sunday will not exist if you leave it to the week of.
-            This is the single booking that decides whether the day ends well.
+            This is the single booking that decides whether the day ends well. Book online through
+            their site, or call <code>932 25 20 18</code>.
           </div>
 
           <div class="actions">
@@ -854,57 +874,60 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
     </div>
 
     <div class="grid grid--2 reveal">
+      <div class="note note--calm">
+        <h3>The 125 is not the constraint</h3>
+        <p>
+          Spanish law bars <em>mopeds</em> (≤50 cc) from autopistas and autovías — <strong>not
+          125s.</strong> A 125 cc L3e is legal on the Ronda de Dalt and the Ronda Litoral. This route
+          simply never needs them.
+        </p>
+        <p>
+          The ZBE is enforced <strong>Monday to Friday, 07:00–20:00 only</strong>, so a Sunday ride is
+          outside the window entirely, whatever the bike's emissions label. And motorcycles are
+          <strong>banned from Barcelona's bus and taxi lanes</strong> — which matters on Joan de Borbó,
+          where there's one in each direction.
+        </p>
+      </div>
+
       <div class="note">
-        <h3>The C-31 deserves respect</h3>
+        <h3>Where the roads actually aren't</h3>
         <p>
-          The RACC ranks the Garraf coastal stretch among the ten most dangerous roads in
-          Catalonia, with roughly six fatal or serious accidents a year — and <strong>motorcyclists
-          make up the majority of them.</strong> Narrow, unshouldered, continuous no-overtaking lines.
+          <strong>Carretera de les Aigües:</strong> closed to motor vehicles. Collserola ordinance
+          article 14, and named again in the swine-fever order. Everyone will recommend it anyway.
         </p>
         <p>
-          On a Sunday morning it is full of road cyclists. Ride it as a scenic road, sit behind
-          the group, and take your pictures at Cala Morisca where there's a real parking area
-          rather than on a blind curve.
-        </p>
-      </div>
-
-      <div class="note note--calm">
-        <h3>The ZBE does not apply</h3>
-        <p>
-          Barcelona's low-emission zone only restricts motorcycles and mopeds registered
-          <strong>before roughly 2003</strong>, and enforcement runs <strong>Monday to Friday, 07:00–20:00
-          only.</strong> A Sunday ride is outside the window entirely, whatever you're on. No sticker,
-          no problem.
+          <strong>Passeig Marítim de la Barceloneta:</strong> pedestrian, both levels. So are the
+          Bogatell and Mar Bella promenades. Avinguda del Litoral is the only legal seafront line.
         </p>
         <p>
-          Separately: <strong>Carretera de les Aigües is closed to motorcycles</strong> — Collserola park
-          ordinance, article 14. It isn't on this route, but people keep suggesting it.
+          <strong>Bunkers del Carmel:</strong> deliberately not on this route. Resident-permit parking
+          on the approach streets, gated nightly, and the council spent 2026 trying to regulate the
+          crowds. It's the definition of what you asked me to avoid.
         </p>
       </div>
 
       <div class="note note--calm">
-        <h3>Where you actually park</h3>
+        <h3>Parking, free and otherwise</h3>
         <p>
-          Free white-lined motorcycle bays exist across the city. On this route: <strong>Passeig
-          Marítim</strong> near the Hospital del Mar, and <strong>Plaça del Fòrum</strong> by the CCIB, both with
-          dedicated moto spaces.
+          The white-line moto bays are <strong>free, unreserved, and everywhere</strong> — about 95,000 of
+          them citywide, no app, no ticket. Find the nearest at
+          <a href="https://areaverda.cat/en/motorcycles" target="_blank" rel="noopener">areaverda.cat</a>.
         </p>
         <p>
-          Avoid taking bikes deep into Ciutat Vella — it's a restricted-circulation zone, which
-          is the practical reason this roadbook sends you to Jon Cake's Poblenou shop instead of
-          the Born original.
+          Pavement parking is <em>conditionally</em> legal — over 3 m wide, half a metre off the kerb,
+          3 m left clear — and getting it wrong runs from €50 to €500. Just use the bays.
         </p>
       </div>
 
       <div class="note note--check">
         <h3>Before you go — the checklist</h3>
         <ul class="checklist">
-          <li><span><b>Book Els Pescadors</b> for 20:45, six people. Do it first.</span></li>
-          <li><span><b>Book El Cullerot de Sants</b> for 11:30. It's tiny.</span></li>
-          <li><span><b>Ring the monastery</b> Saturday — <a href="tel:+34937432010">+34 93 743 20 10</a> — it closes for retreats without notice.</span></li>
-          <li><span><b>Check Jon Cake Poblenou is open.</b> Their published hours aren't on a live listing.</span></li>
-          <li><span><b>Fuel up before Sitges.</b> The Garraf interior is thin on stations.</span></li>
-          <li><span><b>Sunset 20:20</b> — leave the Fòrum by 20:30 to make dinner.</span></li>
+          <li><span><b>Book Els Pescadors</b> for 20:45. Do this one first.</span></li>
+          <li><span><b>Book El Cullerot de Sants</b> for 11:30 — <a href="tel:+34934319069">934 31 90 69</a>. Backup: Ca la Montse.</span></li>
+          <li><span><b>Check Collserola is open</b> — <a href="https://parcnaturalcollserola.cat/actualitat/avisos/" target="_blank" rel="noopener">closure notices</a>. Swine fever, closed since March.</span></li>
+          <li><span><b>Check Montjuïc's event calendar</b> for 6 Sept — roads close for stadium events.</span></li>
+          <li><span><b>Confirm Jon Cake Poblenou is open.</b> Their hours aren't on a live listing.</span></li>
+          <li><span><b>Sunset 20:16</b> — be on Avinguda del Litoral by 19:50.</span></li>
         </ul>
       </div>
     </div>
@@ -912,15 +935,15 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
 
   <!-- ══ FOOTER ══════════════════════════════════════════════════════ -->
   <footer class="foot wrap">
-    <p><span class="rule">■</span> Garraf &amp; the Litoral · Sunday 6 September 2026 · Barcelona</p>
-    <p>Hours verified against restaurant sites, the Ajuntament, RACC road data and the Collserola park ordinance. Places marked <em>call first</em> could not be confirmed against a primary source — ring them.</p>
+    <p><span class="rule">■</span> Montjuïc &amp; the Litoral · Sunday 6 September 2026 · 55 km, none of them outside Barcelona</p>
+    <p>Hours checked against restaurant sites, the Ajuntament, the Collserola park ordinance, zbe.barcelona and the Reglamento General de Circulación. Anything tagged <em>call first</em> could not be confirmed against a primary source — ring it.</p>
     <p>Ride within the road, not the roadbook.</p>
   </footer>
 
 </div>
 
 <script>
-  // Reveal-on-scroll — respects reduced motion via the CSS guard.
+  // Reveal-on-scroll — the CSS guards this for reduced-motion users.
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
