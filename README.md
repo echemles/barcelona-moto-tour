@@ -1,5 +1,7 @@
 # Montjuïc & the Litoral
 
+**→ [echemles.github.io/barcelona-moto-tour](https://echemles.github.io/barcelona-moto-tour/)**
+
 A one-day motorcycle roadbook for **Sunday 6 September 2026** — 11:30 until dinner, built for a
 **125cc**, and it never leaves Barcelona.
 
@@ -27,6 +29,25 @@ Roadbook aesthetic: asphalt and ember. Syne for display, Chivo for body, Chivo M
 and road numbers. The timeline rail is a dashed road centre-line; the optional leg is drawn with
 a dashed border. Mobile-first — this gets read on a phone at a petrol station. `@media print`
 collapses it into something you can fold into a tank bag.
+
+## Responsiveness
+
+Verified with headless Chrome at **320 / 360 / 375 / 390 / 412 / 430 / 768 / 1024 / 1280 / 1440 px**
+— zero horizontal overflow, zero elements overhanging the viewport.
+
+Two real bugs were found and fixed in the process:
+
+- The `h1` `clamp()` floor of `2.7rem` never shrank below 43.2px, so "MONTJUÏC" — the widest
+  unbreakable word on the page — laid out 388px wide. That overflowed a 320px iPhone SE by 68px
+  and a 360px Android by 28px, and `body{overflow-x:hidden}` was *hiding* the clipping instead
+  of preventing it. The floor is now derived from what fits at 320px.
+- `.reveal` elements start at `opacity:0` and only `IntersectionObserver` restored them, while
+  `mountReveals()` ran **last** — so any throw inside `mountMap()` would have shipped an entirely
+  blank page. Reveals now run first, each mount is isolated in `try/catch`, the opacity rule is
+  gated behind a `.js` class so a dead script degrades to visible content, and a 2-second
+  failsafe reveals everything if the observer never fires.
+
+Tap targets are ≥44px under `(pointer:coarse)`; Leaflet's zoom controls are bumped to 36px.
 
 ## The map
 
