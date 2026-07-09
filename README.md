@@ -28,6 +28,37 @@ and road numbers. The timeline rail is a dashed road centre-line; the optional l
 a dashed border. Mobile-first — this gets read on a phone at a petrol station. `@media print`
 collapses it into something you can fold into a tank bag.
 
+## The map
+
+Leaflet 1.9.4 over CARTO dark tiles, restyled to the roadbook palette. Markers are the same
+numbered plates as the timeline, coloured by stop type. Scroll-zoom stays locked until you tap,
+so the map can't hijack page scroll on a phone.
+
+The route line is **real road geometry** from OSRM — 2,560 points, simplified with
+Ramer–Douglas–Peucker to 304 — not straight lines between pins. That measured the day at
+**44.6 km and 90 minutes of moving time**. Everything degrades gracefully: if the CDN is
+unreachable the map slot explains itself and the "Navigate full day" button still works.
+
+Regenerate `assets/route.js` if stops change — it holds the geometry, coordinates, and photo
+metadata in one place so credits can't drift from images.
+
+## The photographs
+
+From the Unsplash API. **Each one was visually inspected before it went in**, which mattered: the
+first pass returned an aerial of the Eixample with the Sagrada Família captioned "Montjuïc," and
+the Jardin Majorelle in Marrakech captioned "cactus garden." Both were rejected.
+
+Four of the nine show a real place on this route — the Estadi Olímpic on Montjuïc, Tibidabo above
+Vallvidrera, Barceloneta, the seafront — and are captioned by name. **The other five are
+illustrative and captioned as such.** None of the small bars have ever been photographed for
+stock, and a vermouth glass is not Bar Rovira's vermouth glass. Photographer credit links back
+per the Unsplash license, and each photo's download endpoint is pinged once at build time as
+their API terms require.
+
+The API key lives in `taste-lab-mirror/.env.local` and is **not** in this repo — the photo URLs
+are resolved at build time and hardcoded, so nothing here needs a key at runtime. `.env*` is
+gitignored.
+
 ## Verified
 
 - **Sunset 20:16 CEST, azimuth 279° (due west)** — timeanddate + NOAA. Barcelona's beaches face
