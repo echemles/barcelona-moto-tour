@@ -39,7 +39,9 @@
   --shadow-lift:  0 1px 0 rgba(255,255,255,.05) inset, 0 18px 40px -18px rgba(0,0,0,.9);
 
   --max: 1080px;
-  --gutter: clamp(1.15rem, 4.5vw, 3.25rem);
+  /* Floor is the phone gutter: 24px, not 18.4px. The h1 floor below is
+     derived from whatever this leaves in the content box at 320px. */
+  --gutter: clamp(1.5rem, 5vw, 3.25rem);
 
   --f-display: 'Syne', 'Helvetica Neue', sans-serif;
   --f-body: 'Chivo', 'Helvetica Neue', sans-serif;
@@ -118,7 +120,9 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .topbar__cta:hover{ background:var(--ember-hot); transform:translateY(-1px); }
 
 /* ── Hero ──────────────────────────────────────────────────────────── */
-.hero{ padding:clamp(3rem,9vw,6.5rem) 0 clamp(2rem,5vw,3.5rem); position:relative; }
+/* padding-block, never the shorthand — these all carry .wrap, and `padding: x 0 y`
+   would silently reset its padding-inline gutter to zero. */
+.hero{ padding-block:clamp(3rem,9vw,6.5rem) clamp(2rem,5vw,3.5rem); position:relative; }
 
 .hero__plate{
   display:inline-flex; align-items:baseline; gap:.6rem; flex-wrap:wrap;
@@ -129,9 +133,11 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .hero__plate .n{ font-family:var(--f-display); font-weight:800; font-size:1rem; color:var(--ember); }
 .hero__plate .t{ font-family:var(--f-mono); font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:var(--bone-dim); }
 
-/* "MONTJUÏC" is the widest single word on the page and cannot wrap.
-   The floor is what fits it inside a 320px viewport, not a taste decision. */
-.hero h1{ font-size:clamp(1.95rem,9.4vw,6.9rem); text-transform:uppercase; margin-bottom:.28em; }
+/* "MONTJUÏC" is the widest single word on the page and cannot wrap. It measures
+   ~8.84em, so the floor must satisfy: font <= (320 - 2*gutter) / 8.84 = 30.8px.
+   This is a hard constraint, not a taste decision — raise the gutter and this
+   must come down with it. */
+.hero h1{ font-size:clamp(1.8rem,8.6vw,6.7rem); text-transform:uppercase; margin-bottom:.28em; }
 .hero h1 .amp{ font-weight:600; font-style:italic; color:var(--ember); letter-spacing:-.04em; }
 .hero h1 .line2{ display:block; color:var(--bone-dim); }
 
@@ -156,7 +162,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .stat__k{ font-family:var(--f-mono); font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--bone-faint); margin-top:.5rem; }
 
 /* ── Section frame ─────────────────────────────────────────────────── */
-.section{ padding:clamp(3rem,7vw,5.5rem) 0; }
+.section{ padding-block:clamp(3rem,7vw,5.5rem); }
 .section__head{
   display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap;
   padding-bottom:1.1rem; margin-bottom:2rem;
@@ -395,7 +401,7 @@ h1,h2,h3{ font-family:var(--f-display); font-weight:800; margin:0; line-height:.
 .checklist a:hover{ color:var(--ember-hot); }
 
 /* ── Footer ────────────────────────────────────────────────────────── */
-.foot{ border-top:1px solid var(--rule); padding:2.4rem 0 3.4rem; margin-top:1rem; }
+.foot{ border-top:1px solid var(--rule); padding-block:2.4rem 3.4rem; margin-top:1rem; }
 .foot p{ font-family:var(--f-mono); font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:var(--bone-faint); margin:0 0 .55rem; line-height:1.9; }
 .foot p:last-child{ margin-bottom:0; }
 .foot .rule{ color:var(--ember); }
@@ -425,11 +431,20 @@ a:focus-visible,.btn:focus-visible{ outline:2px solid var(--amber); outline-offs
   .leaflet-control-zoom a{ width:36px!important; height:36px!important; line-height:36px!important; font-size:1.1rem!important; }
   .checklist a, .note a{ padding-block:.2rem; }
 }
-/* Narrow phones: the topbar must never push the CTA off-screen */
+/* Narrow phones: keep the full gutter, buy the room back from the CTA instead */
 @media (max-width:400px){
-  .topbar{ padding-inline:1rem; gap:.6rem; }
-  .topbar__cta{ font-size:.58rem; letter-spacing:.1em; padding-inline:.65rem; }
+  .topbar{ gap:.6rem; }
+  .topbar__cta{ font-size:.56rem; letter-spacing:.09em; padding-inline:.6rem; }
   .actions .btn{ flex:1 1 auto; justify-content:center; }
+}
+
+/* Mobile: the timeline eats the left gutter, so relax the rail and
+   let the cards keep the same optical margin as the prose above them. */
+@media (max-width:859px){
+  .stop{ gap:.35rem 1.15rem; }
+  .stop--optional .stop__body{ padding:1rem .95rem .3rem; }
+  .leg{ padding-left:calc(40px + 1.15rem); gap:.55rem; }
+  .order{ padding-left:.8rem; }
 }
 
 /* ── Print ─────────────────────────────────────────────────────────── */
