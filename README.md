@@ -14,14 +14,44 @@ Open `index.html` in a browser. No build step, no dependencies.
 | 11:30 | El Cullerot de Sants | *Esmorzar de forquilla* — the Catalan fork-and-knife breakfast |
 | 13:15 | Avinguda de l'Estadi → Miramar | The surviving bones of the 1969–75 Montjuïc GP circuit |
 | 14:00 | Jardins de Mossèn Costa i Llobera + Mirador de l'Alcalde | Cactus garden over the port, free, empty |
-| 15:30 | Vallvidrera *(optional — see below)* | The city's own mountain road, up and down the Arrabassada |
-| 17:15 | Bar Rovira, El Clot | Vermut, family-run since 1963, no tourists |
+| 15:00 | Porta del Drac · Portal Miralles · Bellesguard | The Gaudí nobody queues for — all three free, from the street |
+| 15:55 | Vallvidrera *(optional — see below)* | The city's own mountain road, up and down the Arrabassada |
+| 17:20 | Bar Rovira, El Clot | Vermut, family-run since 1963, no tourists |
 | 18:15 | Jon Cake, Poblenou | The cheesecake |
 | 19:15 | Barceloneta | Park in a free moto bay, feet on the sand |
 | 19:50 | Avinguda del Litoral → Fòrum | The seafront run at golden hour |
 | 20:45 | Els Pescadors | Dinner with friends on Plaça de Prim |
 
-~55 km, zero motorway, every stop verified open on a Sunday.
+50.0 km and 1h43 of moving time (measured by OSRM), zero motorway, every stop verified open on a
+Sunday.
+
+## Why this Gaudí, and not the famous Gaudí
+
+The three chosen works sit almost exactly on the Montjuïc → Tibidabo line the ride already takes:
+**+5.4 km and +13 minutes of riding.** All three are free and appreciable from the pavement — no
+ticket, no time slot, no queue.
+
+Deliberately excluded, with reasons:
+
+- **Park Güell** — bars private vehicles 11:00–20:00 to non-resident-permit holders. You cannot
+  ride there.
+- **Sagrada Família** — its superblock permanently closed Carrer de Marina in front of the
+  Nativity façade. Record crowds; 2026 is the Gaudí centenary.
+- **Casa-Museu Gaudí** — physically inside Park Güell, so it inherits the same problem.
+- **Casa Vicens** — genuinely good and less mobbed, but ~2.5 km off-corridor in Gràcia. It'd cost
+  25+ minutes round trip. Worth a separate afternoon.
+- **Col·legi de les Teresianes** — exterior only; it becomes "Museu Gaudí Teresianes" in 2028.
+- **Casa Calvet** (reservation-only restaurant), **Bar Torino** (demolished 1911), **Casa Bofarull**
+  (in Tarragona, and it's Jujol, not Gaudí).
+
+Two caveats live on the page:
+
+- **Torre Bellesguard is the only one you can enter** — Tue–Sun 10:00–15:00, €12, self-guided —
+  and this itinerary arrives around 15:20, after it closes. Exterior only, unless you rebuild the
+  day around a morning visit.
+- **The Dragon Gate may be under scaffolding.** Barcelona approved a €202,878 restoration of the
+  gate on 12 April 2026, works starting "during 2026," with no published schedule. Ring
+  93 256 25 04 first.
 
 ## Design notes
 
@@ -65,16 +95,21 @@ metadata in one place so credits can't drift from images.
 
 ## The photographs
 
-From the Unsplash API. **Each one was visually inspected before it went in**, which mattered: the
-first pass returned an aerial of the Eixample with the Sagrada Família captioned "Montjuïc," and
-the Jardin Majorelle in Marrakech captioned "cactus garden." Both were rejected.
+Nine from the Unsplash API. **Each one was visually inspected before it went in**, which mattered:
+the first pass returned an aerial of the Eixample with the Sagrada Família captioned "Montjuïc,"
+and the Jardin Majorelle in Marrakech captioned "cactus garden." Both were rejected.
 
-Four of the nine show a real place on this route — the Estadi Olímpic on Montjuïc, Tibidabo above
-Vallvidrera, Barceloneta, the seafront — and are captioned by name. **The other five are
-illustrative and captioned as such.** None of the small bars have ever been photographed for
-stock, and a vermouth glass is not Bar Rovira's vermouth glass. Photographer credit links back
-per the Unsplash license, and each photo's download endpoint is pinged once at build time as
-their API terms require.
+The tenth — the **Porta del Drac** — is from Wikimedia Commons, because Unsplash has no photograph
+of Gaudí's dragon gate at all. Searching it returned a Burning Man sculpture and a gate reading
+"THE WAY." The Commons file is by *Amontero*, CC BY-SA 4.0, vendored into `assets/img/` at two
+sizes rather than hotlinked (Wikimedia only renders certain thumbnail widths, and discourages
+hotlinking).
+
+Five of the ten show a real place on this route — the Estadi Olímpic, the Porta del Drac, Tibidabo,
+Barceloneta, the seafront — and are captioned by name. **The other five are illustrative and
+captioned as such.** None of the small bars have ever been photographed for stock, and a vermouth
+glass is not Bar Rovira's vermouth glass. Photographer credit links back per each license, and each
+Unsplash photo's download endpoint is pinged once at build time as their API terms require.
 
 The API key lives in `taste-lab-mirror/.env.local` and is **not** in this repo — the photo URLs
 are resolved at build time and hardcoded, so nothing here needs a key at runtime. `.env*` is
